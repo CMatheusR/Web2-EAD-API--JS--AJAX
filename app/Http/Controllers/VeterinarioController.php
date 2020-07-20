@@ -61,4 +61,9 @@ class VeterinarioController extends Controller
         }
         return response('Veterinário não encontrado', 404);
     }
+
+    public function loadJson(){
+        $veterinario = Veterinario::all();
+        return json_encode($veterinario);
+    }
 }

@@ -61,4 +61,9 @@ class EspecialidadeController extends Controller
         }
         return response('Especialidade não encontrada', 404);
     }
+
+    public function loadJson(){
+        $especialidades = Especialidade::all();
+        return json_encode($especialidades);
+    }
 }

@@ -86,6 +86,7 @@
      <script type="text/javascript">
          function criar() {
              $('#modalVeterinario').modal().find('.modal-title').text("Cadastrar Veterinario");
+             carregarEspecialidade();
              $("#id").val('');
              $("#crmv").val('');
              $("#especialidade_id").val('');
@@ -99,7 +100,17 @@
          });
 
          function carregarEspecialidade(id){
-             $.getJSON('')
+             $.getJSON('/api/especialidade/load', function (data) {
+                $('#especialidade_id').html("");
+                for (let i=0; i < data.length; i++){
+                    if(data[i].id == id){
+                        item = '<option value="' + data[i].id + '"selected>' + data[i].nome + '</option>';
+                    }else{
+                        item = '<option value="' + data[i].id + '">' + data[i].nome + '</option>';
+                    }
+                    $('#especialidade_id').append(item);
+                }
+             });
          }
 
          $("#formVeterinario").submit(function (event) {
@@ -116,8 +127,8 @@
          function insert() {
              veterinario = {
                  nome: $("#nome").val(),
-                 email: $("#email").val(),
-                 telefone: $("#telefone").val()
+                 crmv: $("#crmv").val(),
+                 especialidade_id: $("#especialidade_id").val()
              };
 
              $.post("/api/veterinario", veterinario, function (data) {
@@ -130,10 +141,12 @@
          function editar(id) {
              $('#modalVeterinario').modal().find('.modal-title').text("Alterar Veterinario");
              $.getJSON('/api/veterinario/'+id, function (data) {
+
                  $('#id').val(data.id);
                  $('#nome').val(data.nome);
-                 $('#email').val(data.email);
-                 $('#telefone').val(data.telefone);
+                 $('#crmv').val(data.crmv);
+                 $('#especialidade_id').val(data.especialidade_id);
+                 carregarEspecialidade(data.id);
                  $('#modalVeterinario').modal('show');
 
              })
@@ -142,8 +155,8 @@
          function update(id) {
              veterinario = {
                  nome: $("#nome").val(),
-                 email: $("#email").val(),
-                 telefone: $("#telefone").val()
+                 crmv: $("#crmv").val(),
+                 especialidade_id: $("#especialidade_id").val()
              };
              $.ajax({
                  type: "PUT",

@@ -65,4 +65,9 @@ class ClienteController extends Controller
         }
         return response('Cliente não encontrado', 404);
     }
+
+    public function loadJson(){
+        $clientes = Cliente::all();
+        return json_encode($clientes);
+    }
 }
